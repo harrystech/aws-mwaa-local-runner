@@ -21,16 +21,20 @@ services:
         environment:
             - LOAD_EX=n
             - EXECUTOR=Local
+            - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+            - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+            - AWS_REGION=${AWS_REGION}
+            - AWS_SESSION_TOKEN=${AWS_SESSION_TOKEN}
         logging:
             options:
                 max-size: 10m
                 max-file: "3"
         volumes:
-            - ${PWD}/dags:/usr/local/airflow/dags
-            - ${PWD}/plugins:/usr/local/airflow/plugins
-            - ${PWD}/requirements:/usr/local/airflow/requirements
+            - ${PWD}/../harrys-data-warehouse/airflow/dags:/usr/local/airflow/dags
+            - ${PWD}/../harrys-data-warehouse/airflow/plugins:/usr/local/airflow/plugins
+            - ${PWD}/../harrys-data-warehouse/airflow/requirements:/usr/local/airflow/requirements
         ports:
-            - "8080:8080"
+            - "8085:8080"
         command: local-runner
         healthcheck:
             test: ["CMD-SHELL", "[ -f /usr/local/airflow/airflow-webserver.pid ]"]
