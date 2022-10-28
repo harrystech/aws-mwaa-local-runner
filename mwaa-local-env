@@ -57,7 +57,7 @@ build_image() {
 }
 
 #set aws credentials AWS_ACCESS_KEY_ID,AWS_SECRET_ACCESS_KEY,AWS_REGION,AWS_SESSION_TOKEN
-source docker/script/get_sso_creds.sh hs-data-dev:hs-eng-data-engineer
+# source docker/script/get_sso_creds.sh hs-data-dev:hs-eng-data-engineer
 
 case "$1" in
 validate-prereqs)
