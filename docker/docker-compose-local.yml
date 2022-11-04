@@ -21,20 +21,17 @@ services:
         environment:
             - LOAD_EX=n
             - EXECUTOR=Local
-            - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
-            - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
-            - AWS_DEFAULT_REGION=${AWS_REGION}
-            - AWS_REGION=${AWS_REGION}
-            - AWS_SESSION_TOKEN=${AWS_SESSION_TOKEN}
+            - AWS_PROFILE=${AWS_PROFILE}
+            - AWS_REGION=${AWS_REGION:-us-east-1}
         logging:
             options:
                 max-size: 10m
                 max-file: "3"
         volumes:
-            - ${PWD}/../harrys-data-warehouse/airflow/harrys_airflow/dags:/usr/local/airflow/dags
-            - ${PWD}/../harrys-data-warehouse/airflow/harrys_airflow/plugins:/usr/local/airflow/plugins
-            - ${PWD}/../harrys-data-warehouse/airflow/harrys_airflow/requirements.txt:/usr/local/airflow/requirements/requirements.txt
-            - ${PWD}/../harrys-data-warehouse/airflow/tests:/usr/local/airflow/tests
+            - ${HDW_AIRFLOW_ROOT}/dags:/usr/local/airflow/dags
+            - ${HDW_AIRFLOW_ROOT}/plugins:/usr/local/airflow/plugins
+            - ${HDW_AIRFLOW_ROOT}:/usr/local/airflow/requirements
+            - ${HOME}/.aws:/usr/local/airflow/.aws
         ports:
             - "8085:8080"
         command: local-runner
