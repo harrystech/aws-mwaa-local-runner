@@ -34,5 +34,5 @@ services:
             - ${PWD}/../harrys-data-warehouse/airflow/plugins:/usr/local/airflow/plugins
             - ${PWD}/../harrys-data-warehouse/airflow/requirements.txt:/usr/local/airflow/requirements/requirements.txt
         ports:
-            - "8080:8080"
+            - "8083:8080"
         command: resetdb
