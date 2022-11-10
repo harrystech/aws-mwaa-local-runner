@@ -210,6 +210,20 @@ the Airflow DB was initialized, in this case you will need to reset the DB (`./m
 
 See [CONTRIBUTING](CONTRIBUTING.md#security-issue-notifications) for more information.
 
+## Troubleshooting
+
+### I cannot authenticate with the default username/password
+
+Something went wrong in setting up your credentials. Please run the following
+to reset your database:
+
+```shell
+rm -r ./db-data
+./mwaa-local-env reset-db
+```
+
+You can now proceed normally the steps above.
+
 ## License
 
 This library is licensed under the MIT-0 License. See the LICENSE file.
