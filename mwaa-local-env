@@ -51,6 +51,7 @@ validate_prereqs() {
    fi
 }
 
+
 build_image() {
    docker build --rm --compress -t amazon/mwaa-local:$AIRFLOW_VERSION ./docker
 }
@@ -87,6 +88,9 @@ reset-db)
    ;;
 start)
    docker-compose -p $DOCKER_COMPOSE_PROJECT_NAME -f ./docker/docker-compose-local.yml up
+   ;;
+stop)
+   docker-compose -p $DOCKER_COMPOSE_PROJECT_NAME -f ./docker/docker-compose-local.yml down
    ;;
 help)
    display_help

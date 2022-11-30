@@ -49,14 +49,24 @@ VERSION
 - **Windows**: Windows Subsystem for Linux (WSL) to run the bash based command `mwaa-local-env`. Please follow [Windows Subsystem for Linux Installation (WSL)](https://docs.docker.com/docker-for-windows/wsl/) and [Using Docker in WSL 2](https://code.visualstudio.com/blogs/2020/03/02/docker-in-wsl2), to get started.
 
 ## Get started
+- make sure to clone outside of HDW repo
 
 ```bash
 git clone https://github.com/aws/aws-mwaa-local-runner.git
+# after doing ls on command line, you should see below output
+ls
+  - harrys-data-warehouse
+  - aws-mwaa-local-runner
 cd aws-mwaa-local-runner
 ```
 
 ### Step one: Building the Docker image
 
+##### SSO login
+- select dev profile after running below command
+```bash
+aws sso login
+```
 Build the Docker container image using the following command:
 
 ```bash
@@ -77,7 +87,10 @@ Runs a local Apache Airflow environment that is a close representation of MWAA b
 ./mwaa-local-env start
 ```
 
-To stop the local environment, Ctrl+C on the terminal and wait till the local runner and the postgres containers are stopped.
+To stop the local environment, Ctrl+C on the terminal and wait till the local runner and the postgres containers are stopped. Also please run below command to remove any orphan containers or networks (after hitting Ctrl+C on the terminal)
+```bash
+./mwaa-local-env stop
+```
 
 ### Step three: Accessing the Airflow UI
 
@@ -88,9 +101,9 @@ By default, the `bootstrap.sh` script creates a username and password for your l
 
 #### Airflow UI
 
-- Open the Apache Airlfow UI: <http://localhost:8080/>.
+- Open the Apache Airlfow UI: <http://localhost:8085/>.
 
-### Step four: Add DAGs and supporting files
+### Step four: Add DAGs and supporting files - you can skip this step, since we point to HDW repo using docker compose 
 
 The following section describes where to add your DAG code and supporting files. We recommend creating a directory structure similar to your MWAA environment.
 
@@ -169,11 +182,23 @@ The following section contains errors you may encounter when using the Docker co
 ### My environment is not starting - process failed with dag_stats_table already exists
 
 - If you encountered [the following error](https://issues.apache.org/jira/browse/AIRFLOW-3678): `process fails with "dag_stats_table already exists"`, you'll need to reset your database using the following command:
-
+- if you see error: Fernet Key InvalidToken follow below commands to reset
+- please delete aws-mwaa-local-runner/db-data folder manually and run below commands
 ```bash
 ./mwaa-local-env reset-db
+./mwaa-local-env build-image
+./mwaa-local-env start
+./mwaa-local-env stop #use this command if you are done working with local airflow
 ```
+- if you see error: `An error occurred (ExpiredToken) when calling the ListBuckets operation: The provided token has expired. please do following` for any tasks which uses aws services, it means that token has expired and we need to follow below commands
 
+```bash
+aws sso login
+`select dev profile and then run below commands`
+./mwaa-local-env build-image
+./mwaa-local-env start
+./mwaa-local-env stop #use this command if you are done working with local airflow
+```
 ### Fernet Key InvalidToken
 
 A Fernet Key is generated during image build (`./mwaa-local-env build-image`) and is durable throughout all
@@ -184,6 +209,20 @@ the Airflow DB was initialized, in this case you will need to reset the DB (`./m
 ## Security
 
 See [CONTRIBUTING](CONTRIBUTING.md#security-issue-notifications) for more information.
+
+## Troubleshooting
+
+### I cannot authenticate with the default username/password
+
+Something went wrong in setting up your credentials. Please run the following
+to reset your database:
+
+```shell
+rm -r ./db-data
+./mwaa-local-env reset-db
+```
+
+You can now proceed normally the steps above.
 
 ## License
 

@@ -21,16 +21,19 @@ services:
         environment:
             - LOAD_EX=n
             - EXECUTOR=Local
+            - AWS_PROFILE=${AWS_PROFILE}
+            - AWS_REGION=${AWS_REGION:-us-east-1}
         logging:
             options:
                 max-size: 10m
                 max-file: "3"
         volumes:
-            - ${PWD}/dags:/usr/local/airflow/dags
-            - ${PWD}/plugins:/usr/local/airflow/plugins
-            - ${PWD}/requirements:/usr/local/airflow/requirements
+            - ${HDW_AIRFLOW_ROOT}/dags:/usr/local/airflow/dags
+            - ${HDW_AIRFLOW_ROOT}/plugins:/usr/local/airflow/plugins
+            - ${HDW_AIRFLOW_ROOT}/requirements:/usr/local/airflow/requirements
+            - ${HOME}/.aws:/usr/local/airflow/.aws
         ports:
-            - "8080:8080"
+            - "8085:8080"
         command: local-runner
         healthcheck:
             test: ["CMD-SHELL", "[ -f /usr/local/airflow/airflow-webserver.pid ]"]
