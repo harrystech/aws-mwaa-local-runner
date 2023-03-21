@@ -205,6 +205,8 @@ aws sso login
 ```
 - If you are moving from an older version of local-runner you may need to run the above reset-db command, or delete your `./db-data` folder. Note, too, that newer Airflow versions have newer provider packages, which may require updating your DAG code.
 
+- If you are moving from an older version of local-runner you may need to run the above reset-db command, or delete your `./db-data` folder. Note, too, that newer Airflow versions have newer provider packages, which may require updating your DAG code.
+
 ### Fernet Key InvalidToken
 
 A Fernet Key is generated during image build (`./mwaa-local-env build-image`) and is durable throughout all
